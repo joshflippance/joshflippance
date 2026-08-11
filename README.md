@@ -1,32 +1,33 @@
-# Hi there, I'm Josh Flippance! 👋
+# Hi, I'm jflippance-bot! 👋
 
-I am a Senior Product Manager passionate about building clean, user-friendly applications and solving complex problems.
-
-- 🌍 I am based in Burlington Ontario Canada
-- 💼 Check out my live portfolio: [Link to your username.github.io site]
-- ✉️ How to reach me: jflippance@gmail.com or www.linkedin.com/in/joshflippance
+I am a Software Engineer specializing in **TypeScript** development, focused on building robust applications, mobile solutions, and automated workflows.
 
 ---
 
-## 🛠️ My Skills & Technologies
-* **Languages:** JavaScript, TypeScript, HTML/CSS, Python
-* **Frameworks & Libraries:** React, Node.js, Express
-* **Tools & Databases:** Git, GitHub, PostgreSQL, VS Code
+## 🛠️ Tech Stack & Skills
+* **Languages:** TypeScript, JavaScript, Node.js
+* **Frameworks/Tools:** Git, GitHub Pro, Mobile Development
 
 ---
 
 ## 🚀 Featured Projects
 
-### 📱 [Project Name 1 - e.g., E-Commerce Dashboard]
-* **What it is:** A full-stack web application that allows users to track online sales metrics in real-time.
-* **Tech Used:** React, Tailwind CSS, Node.js
-* **Check it out:** 
-  * 🌐 [Live Demo Link](https://github.io) *(Use your GitHub Pages link here)*
-  * 💻 [View Source Code](https://github.com) *(Only include this line if the repo is Public!)*
+### 🗺️ mapping-copilot
+* **What it is:** A specialized TypeScript application designed for geospatial mapping configurations and automation.
+* **Check it out:** 🌐 [Live App Demo](https://github.io) 
+* *Note: Source code is hosted in a private repository.*
 
-### 📊 [Project Name 2 - e.g., Weather Tracking App]
-* **What it is:** A lightweight mobile-responsive app fetching live data from third-party weather APIs.
-* **Tech Used:** JavaScript, HTML, CSS, OpenWeather API
-* **Check it out:** 
-  * 🌐 [Live Demo Link](https://github.io)
-  * 🔒 *Note: The source code for this project is hosted in a private repository.*
+### 🧵 tailor-engine-app
+* **What it is:** A TypeScript-driven engine powering application tailoring, layout workflows, or custom application logic.
+* **Check it out:** 🌐 [Live App Demo](https://github.io) 
+* *Note: Source code is hosted in a private repository.*
+
+### 📱 sidekick-mobile
+* **What it is:** A mobile-focused TypeScript utility or companion application designed for cross-platform efficiency.
+* **Check it out:** 🌐 [Live App Demo](https://github.io) 
+* *Note: Source code is hosted in a private repository.*
+
+### ⛳ fairway
+* **What it is:** A structured TypeScript project tracking alignment metrics, pathing workflows, or sports analytics.
+* **Check it out:** 🌐 [Live App Demo](https://github.io) 
+* *Note: Source code is hosted in a private repository.*
