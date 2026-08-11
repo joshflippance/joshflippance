@@ -1,33 +1,64 @@
-# Hi, I'm jflippance-bot! 👋
+# Josh Flippance
 
-I am a Software Engineer specializing in **TypeScript** development, focused on building robust applications, mobile solutions, and automated workflows.
+Senior product leader. I build the AI systems I spec.
 
----
+Twenty years building software, from engineering into VP and director product leadership across healthcare, fintech, edtech, cybersecurity, martech, and telematics. These days I don't just write the requirement, I prototype it. This profile is where that work lives.
 
-## 🛠️ Tech Stack & Skills
-* **Languages:** TypeScript, JavaScript, Node.js
-* **Frameworks/Tools:** Git, GitHub Pro, Mobile Development
+Full background at **[joshflippance.com](https://joshflippance.com)** · [LinkedIn](https://linkedin.com/in/joshflippance)
 
 ---
 
-## 🚀 Featured Projects
+## Projects
 
-### 🗺️ mapping-copilot
-* **What it is:** A specialized TypeScript application designed for geospatial mapping configurations and automation.
-* **Check it out:** 🌐 [Live App Demo](https://github.io) 
-* *Note: Source code is hosted in a private repository.*
+### fairway — [live app](https://fairway-s4vl.onrender.com)
+Golf handicap tracking for amateur players. Photograph your paper scorecard or score live hole by hole, and it computes your World Handicap System index automatically. I directed AI coding agents to build it, solo.
 
-### 🧵 tailor-engine-app
-* **What it is:** A TypeScript-driven engine powering application tailoring, layout workflows, or custom application logic.
-* **Check it out:** 🌐 [Live App Demo](https://github.io) 
-* *Note: Source code is hosted in a private repository.*
+The scorecard photo runs through a vision model that returns hole-by-hole scores, course, tee, and rating as structured JSON, plus a confidence rating. Low confidence routes back to the player to confirm instead of silently saving a wrong score. The other hard part was live multiplayer: four people scoring one match at once, handled with a Postgres function that updates a single hole inside a JSONB array so concurrent editors can't overwrite each other.
 
-### 📱 sidekick-mobile
-* **What it is:** A mobile-focused TypeScript utility or companion application designed for cross-platform efficiency.
-* **Check it out:** 🌐 [Live App Demo](https://github.io) 
-* *Note: Source code is hosted in a private repository.*
+Web app live, iOS and Android in store testing. React, Node, Supabase, Capacitor, Claude vision. Instrumented with PostHog and Sentry. 137 commits, 65 automated tests.
 
-### ⛳ fairway
-* **What it is:** A structured TypeScript project tracking alignment metrics, pathing workflows, or sports analytics.
-* **Check it out:** 🌐 [Live App Demo](https://github.io) 
-* *Note: Source code is hosted in a private repository.*
+### sidekick — Google Play testing
+An AI job-search app that tailors a resume and cover letter to a specific role, with an honesty guardrail that fact-checks the output against your actual history before it ships. Tailoring tools that quietly invent experience are worse than useless when someone checks a reference.
+
+React Native, Claude API, Supabase.
+
+### mapping-copilot
+I spent a year at MealSuite cutting EHR integration delivery from 65 days to under 30. This attacks the part that stayed manual: healthcare SaaS vendors still spend weeks and five figures per customer hand-mapping each hospital's HL7 v2 feed into their schema. A model drafts the mapping, a human approves it field by field, then a deterministic engine executes the approved version. The model proposes, it never touches live clinical data.
+
+The part I care about is the benchmark: a blind test of whether the drafts are any good, with a leakage check that fails the run if a ground-truth value appears in the prompt without being in the source feed. Otherwise an accuracy number just tells you the model read the answer.
+
+Prototype, synthetic data. TypeScript, zero runtime dependencies, Anthropic API.
+
+### Agentic sourcing pipeline
+A daily agent that pulls candidate records from 30+ sources, dedupes on a composite key, verifies each against the live source, scores it on a weighted rubric, and writes to a 32-column schema behind write guardrails. An inbox sweep advances each record through a status state machine. Every consequential action stays human-in-the-loop.
+
+A stale cache once made it read 23 rows in a 147-row file, which would have silently overwritten data. So it now re-reads before every run, halts if the row count drops unexpectedly, and verifies after write. 362 records processed across 33 sources.
+
+---
+
+## Background
+
+**MealSuite** — Director, Data Integrations (2025–2026). Scaled to 100+ EMR/EHR, ERP, and supply chain integrations. Cut delivery from 65+ business days to under 30.
+
+**Limelight Platforms** — VP Product (2023–2025). Led the concept-to-launch rebuild serving 100+ brands including Toyota, BMW, and BRP. $2M budget. Event setup from months to days.
+
+**IMS** — Senior PM (2020–2021). Industry-first connected claims using telematics and crash data. Built and mentored 5 PMs.
+
+**Prodigy Education** — PM (2019). Content authoring platform behind a 50M+ student user base.
+
+**Points.com** — Senior PM (2007–2011). 14+ product lines, $5M+ ARR.
+
+Earlier: Altus Group, BlueSun, Scalar Decisions, ADP Canada, Invatron Systems.
+
+---
+
+## Tools
+
+TypeScript, Node, React / React Native, Python, Supabase, Next.js. Claude API and Claude Code, MCP, agent orchestration, structured output, evals, retrieval and grounding, human-in-the-loop design. HL7 / FHIR, REST, SAML / OIDC / SCIM. PostHog, Sentry, Playwright.
+
+AI Product Management certification (Product School) · Certified Agile Product Owner (Scrum Alliance) · Business analysis master's certificate, Schulich School of Business
+
+---
+
+Open to senior PM and product leadership roles. Burlington, Ontario, open to remote.
+jflippance@gmail.com
