@@ -2,7 +2,7 @@
 
 Senior product leader. I build the AI systems I spec.
 
-Twenty years building software, from engineering into VP and director product leadership across healthcare, fintech, edtech, cybersecurity, martech, and telematics. These days I don't just write the requirement, I prototype it. This profile is where that work lives.
+Twenty years building software, from engineering into VP and director product leadership across healthcare, fintech, edtech, cybersecurity, martech, and telematics. These days I don't just write the requirement, I prototype it. I set the architecture and the data model, read the diffs, and own the calls the model can't make: what the schema has to guarantee, where a confident wrong answer costs more than no answer, and when a working implementation gets thrown out because the shape is wrong. This profile is where that work lives.
 
 Full background at **[joshflippance.com](https://joshflippance.com)** · [LinkedIn](https://linkedin.com/in/joshflippance)
 
@@ -15,7 +15,7 @@ Golf handicap tracking for amateur players. Photograph your paper scorecard or s
 
 The scorecard photo runs through a vision model that returns hole-by-hole scores, course, tee, and rating as structured JSON, plus a confidence rating. Low confidence routes back to the player to confirm instead of silently saving a wrong score. The other hard part was live multiplayer: four people scoring one match at once, handled with a Postgres function that updates a single hole inside a JSONB array so concurrent editors can't overwrite each other.
 
-Web app live, iOS and Android in store testing. React, Node, Supabase, Capacitor, Claude vision. Instrumented with PostHog and Sentry. 137 commits, 65 automated tests.
+Web app live, iOS and Android in store testing. React, Node, Supabase, Capacitor, Claude vision. Instrumented with PostHog and Sentry. <!--stats:fairway-->137 commits<!--/stats:fairway-->, 65 automated tests.
 
 ### sidekick — Google Play testing
 An AI job-search app that tailors a resume and cover letter to a specific role, with an honesty guardrail that fact-checks the output against your actual history before it ships. Tailoring tools that quietly invent experience are worse than useless when someone checks a reference.
@@ -33,6 +33,15 @@ Prototype, synthetic data. TypeScript, zero runtime dependencies, Anthropic API.
 A daily agent that pulls candidate records from 30+ sources, dedupes on a composite key, verifies each against the live source, scores it on a weighted rubric, and writes to a 32-column schema behind write guardrails. An inbox sweep advances each record through a status state machine. Every consequential action stays human-in-the-loop.
 
 A stale cache once made it read 23 rows in a 147-row file, which would have silently overwritten data. So it now re-reads before every run, halts if the row count drops unexpectedly, and verifies after write. 362 records processed across 33 sources.
+
+### circle — private repo, pre-build
+A one-way notice board for families that span more than one household. Divorced parents, step-parents, and two or three sets of grandparents all need updates on the same kids, and every family sharing app puts them in one room where they see each other's names and comments. That is the reason the whole category is unusable for these families, and no product on the market fixes it.
+
+The hard part is the visibility model, not the feature list. A reply has to belong to the relationship rather than to the post: the thread is keyed on (circle, subscriber), so a grandparent answering a question never turns into a group chat with hidden UI. Authorization runs server-side at query time on every read, because client-side hiding is the failure mode that leaks. The spec names twelve inference leaks, the places where one subscriber could deduce another's involvement from something other than their reply.
+
+It holds children's information, so residency and identity were settled before any code. Supabase and inbound/outbound email in ca-central-1, functions in Montreal, first-party telemetry only, no third-party analytics or error SDK. Subscribers get no account at all: a single-use link creates a long-lived, revocable session scoped to one subscriber in one circle.
+
+Discovery, spec, architecture, and a 31-item security assessment are done and folded into a 162-story backlog with a 53-story pilot cut. One unmoderated user test run so far. Building it myself with Claude Code. Walkthrough available on request.
 
 ---
 
