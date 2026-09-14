@@ -23,11 +23,13 @@ An AI job-search app that tailors a resume and cover letter to a specific role, 
 React Native, Claude API, Supabase.
 
 ### mapping-copilot
-I spent a year at MealSuite cutting EHR integration delivery from 65 days to under 30. This attacks the part that stayed manual: healthcare SaaS vendors still spend weeks and five figures per customer hand-mapping each hospital's HL7 v2 feed into their schema. A model drafts the mapping, a human approves it field by field, then a deterministic engine executes the approved version. The model proposes, it never touches live clinical data.
+I spent a year at MealSuite cutting EHR integration delivery from 65 days to under 30. This attacks the part that stayed manual: vertical healthcare SaaS vendors in long-term care still spend weeks and five figures per customer hand-mapping each facility's HL7 v2 feed into their schema. A model drafts the mapping, a human approves it field by field, then a deterministic engine executes the approved version. No model ever touches a live message.
 
-The part I care about is the benchmark: a blind test of whether the drafts are any good, with a leakage check that fails the run if a ground-truth value appears in the prompt without being in the source feed. Otherwise an accuracy number just tells you the model read the answer.
+The number that matters is not accuracy, it is the silent error rate. Across ten synthetic feeds the mappings ran 91% field accuracy, and every one of the 220 incorrect fields was surfaced for review. Zero passed through silently. A wrong value nobody flagged is the only failure that reaches a live system unnoticed, so that is the metric the benchmark leads with.
 
-Prototype, synthetic data. TypeScript, zero runtime dependencies, Anthropic API.
+The benchmark is built to be hard to fool. The model sees only the feed profile, the target schema and sample messages, and the harness aborts the run if a ground-truth value appears in a prompt. A generation that errors or returns unparsable output is reported as a failure rather than quietly swapped for a known-good artifact. It runs five times and reports mean and range, because one run is an anecdote.
+
+Six sprints shipped: synthetic HL7 generator, feed analyzer, mapping artifact format, review console with an enforced deploy gate, deterministic runtime with an immutable audit trail tied to the artifact hash, and the blind benchmark. Synthetic data only, no real patient data, ever. TypeScript, zero runtime dependencies, Anthropic API.
 
 ### Agentic sourcing pipeline
 A daily agent that pulls candidate records from 30+ sources, dedupes on a composite key, verifies each against the live source, scores it on a weighted rubric, and writes to a 32-column schema behind write guardrails. An inbox sweep advances each record through a status state machine. Every consequential action stays human-in-the-loop.
