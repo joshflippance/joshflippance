@@ -22,7 +22,7 @@ An AI job-search app that tailors a resume and cover letter to a specific role, 
 
 React Native, Claude API, Supabase.
 
-### mapping-copilot
+### mapping-copilot — [case study](https://github.com/joshflippance/mapping-copilot-case-study)
 I spent a year at MealSuite cutting EHR integration delivery from 65 days to under 30. This attacks the part that stayed manual: vertical healthcare SaaS vendors in long-term care still spend weeks and five figures per customer hand-mapping each facility's HL7 v2 feed into their schema. A model drafts the mapping, a human approves it field by field, then a deterministic engine executes the approved version. No model ever touches a live message.
 
 The number that matters is not accuracy, it is the silent error rate. Across ten synthetic feeds the mappings ran 91% field accuracy, and every one of the 220 incorrect fields was surfaced for review. Zero passed through silently. A wrong value nobody flagged is the only failure that reaches a live system unnoticed, so that is the metric the benchmark leads with.
