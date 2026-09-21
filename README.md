@@ -47,6 +47,12 @@ Discovery, spec, architecture, and a 31-item security assessment are done and fo
 
 ---
 
+## How I work
+
+The reusable parts of the method behind these projects: the ten-step research pass I run before writing a spec, the working rules I give coding agents, the guardrails I apply to any AI feature, and the Claude Code skills I use day to day. [ai-product-workflow](https://github.com/joshflippance/ai-product-workflow)
+
+---
+
 ## Background
 
 **MealSuite** — Director, Data Integrations (2025–2026). Scaled to 100+ EMR/EHR, ERP, and supply chain integrations. Cut delivery from 65+ business days to under 30.
