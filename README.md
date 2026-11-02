@@ -2,68 +2,71 @@
 
 Senior product leader. I build the AI systems I spec.
 
-Twenty years building software, from engineering into VP and director product leadership across healthcare, fintech, edtech, cybersecurity, martech, and telematics. These days I don't just write the requirement, I prototype it. I set the architecture and the data model, read the diffs, and own the calls the model can't make: what the schema has to guarantee, where a confident wrong answer costs more than no answer, and when a working implementation gets thrown out because the shape is wrong. This profile is where that work lives.
+I started in engineering and moved into VP and director product leadership across healthcare, fintech, edtech, cybersecurity, martech, and telematics. These days I don't just write the requirement, I prototype it. I set the architecture and the data model, read the diffs, and own the calls the model can't make: what the schema has to guarantee, where a confident wrong answer costs more than no answer, and when a working implementation gets thrown out because the shape is wrong. This profile is where that work lives.
 
-Full background at **[joshflippance.com](https://joshflippance.com)** · [LinkedIn](https://linkedin.com/in/joshflippance)
+Full background at **[joshflippance.com](https://joshflippance.com)** · [build log](https://joshflippance.com/build-log) · [LinkedIn](https://linkedin.com/in/joshflippance)
 
 ---
 
 ## Projects
 
-### fairway — [live app](https://fairway-s4vl.onrender.com)
-Golf handicap tracking for amateur players. Photograph your paper scorecard or score live hole by hole, and it computes your World Handicap System index automatically. I directed AI coding agents to build it, solo.
+Six products, built solo between August and October 2026 by directing AI coding agents. All live.
 
-The scorecard photo runs through a vision model that returns hole-by-hole scores, course, tee, and rating as structured JSON, plus a confidence rating. Low confidence routes back to the player to confirm instead of silently saving a wrong score. The other hard part was live multiplayer: four people scoring one match at once, handled with a Postgres function that updates a single hole inside a JSONB array so concurrent editors can't overwrite each other.
+### Plumb, with Mapping Copilot · [live demo](https://integrationplatform.vercel.app) · [case study](https://github.com/joshflippance/mapping-copilot-case-study)
+I spent a year at MealSuite cutting EHR integration delivery from 65 days to under 30. This attacks the part that stayed manual: vertical healthcare SaaS vendors in long term care still spend weeks and five figures per customer hand mapping each facility's HL7 v2 feed into their schema. Plumb takes HL7 v2 in, checks it, maps it and delivers it with a queue and retries. Mapping Copilot drafts each mapping, a person approves it field by field, and a deterministic engine runs the approved version. No model ever touches a live message.
 
-Web app live, iOS and Android in store testing. React, Node, Supabase, Capacitor, Claude vision. Instrumented with PostHog and Sentry. <!--stats:fairway-->137 commits<!--/stats:fairway-->, 65 automated tests.
+The number that matters is not accuracy, it is the silent error rate: a wrong value nobody flagged is the only failure that reaches a live system unnoticed. The live model's own confidence turned out to be overconfident, so I replaced it with evidence based calibration and tested it on feeds it never saw.
 
-### sidekick — Google Play testing
-An AI job-search app that tailors a resume and cover letter to a specific role, with an honesty guardrail that fact-checks the output against your actual history before it ships. Tailoring tools that quietly invent experience are worse than useless when someone checks a reference.
+| Run | Silent errors | Wrong fields surfaced | Field accuracy |
+|---|---|---|---|
+| Offline reference mapper (pipeline check, no model) | 0% | 100% | 91% |
+| Live model, HL7, calibrated, held out run | 0.5% (4.7% raw) | 99% (87% raw) | about 63 to 65% |
+| Live model, CSV census exports, same calibration | 0.5% | 100% | 91% |
 
-React Native, Claude API, Supabase.
+Three apps that really talk to each other (a mock EHR, the platform, a mock dining system), over HTTPS or MLLP. Byte identical output on every re run, 365 automated checks. Synthetic data only, no real patient data, ever. TypeScript, Claude API.
 
-### mapping-copilot — [case study](https://github.com/joshflippance/mapping-copilot-case-study)
-I spent a year at MealSuite cutting EHR integration delivery from 65 days to under 30. This attacks the part that stayed manual: vertical healthcare SaaS vendors in long-term care still spend weeks and five figures per customer hand-mapping each facility's HL7 v2 feed into their schema. A model drafts the mapping, a human approves it field by field, then a deterministic engine executes the approved version. No model ever touches a live message.
+### JobProgress · [live](https://jobprogress.app)
+A private workspace for one person's job search: roles, notes, contacts, resumes and, if they choose, job related email. AI drafts application packages, interview prep and replies; the person reviews and sends. It cannot send, delete or change email.
 
-The number that matters is not accuracy, it is the silent error rate. Across ten synthetic feeds the mappings ran 91% field accuracy, and every one of the 220 incorrect fields was surfaced for review. Zero passed through silently. A wrong value nobody flagged is the only failure that reaches a live system unnoticed, so that is the metric the benchmark leads with.
+It started as Sidekick, a mobile tailoring app with a second AI pass that checks every claim against the person's real history. That became the agent pipeline running my own search, then a hosted product. Every table refuses one account's rows to another, enforced in the database, reviewed and tested end to end on Oct 24. A Chrome extension saves jobs from LinkedIn, Indeed or a careers page. Next.js, Supabase in Canada, Claude API, read only Gmail.
 
-The benchmark is built to be hard to fool. The model sees only the feed profile, the target schema and sample messages, and the harness aborts the run if a ground-truth value appears in a prompt. A generation that errors or returns unparsable output is reported as a failure rather than quietly swapped for a known-good artifact. It runs five times and reports mean and range, because one run is an anecdote.
+### Family Circles · [live](https://tryfamilycircles.app) · [case study](https://github.com/joshflippance/circle-case-study)
+A one way notice board for families that span more than one household. Divorced parents, step parents, and two or three sets of grandparents all need updates on the same kids, and every family sharing app puts them in one room where they see each other's names and comments.
 
-Six sprints shipped: synthetic HL7 generator, feed analyzer, mapping artifact format, review console with an enforced deploy gate, deterministic runtime with an immutable audit trail tied to the artifact hash, and the blind benchmark. Synthetic data only, no real patient data, ever. TypeScript, zero runtime dependencies, Anthropic API.
+The hard part is the visibility model, not the feature list. A reply belongs to the relationship rather than to the post: the thread is keyed on (circle, subscriber), so a grandparent answering a question never turns into a group chat with hidden UI. Authorization runs in the database on every read, because client side hiding is the failure mode that leaks. It holds children's information, so residency and identity were settled before any code: data in Canada, two factor sign in for owners, location data stripped from photos.
 
-### Agentic sourcing pipeline
-A daily agent that pulls candidate records from 30+ sources, dedupes on a composite key, verifies each against the live source, scores it on a weighted rubric, and writes to a 32-column schema behind write guardrails. An inbox sweep advances each record through a status state machine. Every consequential action stays human-in-the-loop.
+Owner and relative web apps are live. Not yet tested with real families; that is the next gate. Next.js 16, Supabase with row level security, Amazon S3, Resend, Amazon SES.
 
-A stale cache once made it read 23 rows in a 147-row file, which would have silently overwritten data. So it now re-reads before every run, halts if the row count drops unexpectedly, and verifies after write. 362 records processed across 33 sources.
+### Cottage Book · [live](https://cottagebook.ca)
+A booking calendar for shared family properties: one link the whole family opens on their phone. Tenant isolation lives in Postgres, with isolation tests in CI that block a production migration when they fail. Members leave feedback in the app, and a weekly Claude job weighs each note against the PRD and opens a pull request to the backlog for my review. Branches with shares, shared costs, chat, a calendar feed and Stripe billing. Live and dogfooding with my own family.
 
-### circle — [case study](https://github.com/joshflippance/circle-case-study), pre-build
-A one-way notice board for families that span more than one household. Divorced parents, step-parents, and two or three sets of grandparents all need updates on the same kids, and every family sharing app puts them in one room where they see each other's names and comments. That is the reason the whole category is unusable for these families, and no product on the market fixes it.
+### fairway · [live app](https://fairway-gilt.vercel.app)
+Started as a handicap tracker: photograph a scorecard, a vision model returns hole by hole scores as structured JSON with a confidence rating, and low confidence routes back to the player to confirm instead of silently saving a wrong score. On Sep 11 I changed the bet. An unofficial index can never beat the official services, so the wedge became group play for golf trips and small tournaments: an organizer shares a link and everyone scores live with no account. Events shipped 18 days later. Native apps paused to keep it web only.
 
-The hard part is the visibility model, not the feature list. A reply has to belong to the relationship rather than to the post: the thread is keyed on (circle, subscriber), so a grandparent answering a question never turns into a group chat with hidden UI. Authorization runs server-side at query time on every read, because client-side hiding is the failure mode that leaks. The spec names sixteen inference leaks, the places where one subscriber could deduce another's involvement from something other than their reply.
+The other hard part was live multiplayer: several people scoring one match at once, handled with a Postgres function that updates a single hole inside a JSONB array so concurrent editors can't overwrite each other. React, Supabase, Claude vision, Vercel, PostHog, Sentry. <!--stats:fairway-->137 commits<!--/stats:fairway-->.
 
-It holds children's information, so residency and identity were settled before any code. Supabase and inbound/outbound email in ca-central-1, functions in Montréal, first-party telemetry only, no third-party analytics or error SDK. Subscribers get no account at all: a single-use link creates a long-lived, revocable session scoped to one subscriber in one circle.
-
-Discovery, spec, architecture, and a 31-item security assessment are done and folded into a 162-story backlog with a 53-story pilot cut. One unmoderated user test run so far. Building it myself with Claude Code. The spec and backlog stay private; the write-up of the problem, the decisions and the security review is public in the case study above.
+### Cottage Games · [live](https://cottage-games.vercel.app)
+A live cornhole scoreboard for the cottage tournament. Scores are an append only log, so nothing is ever deleted, only replaced or voided, and a disputed game can always be traced. TanStack Start, Supabase.
 
 ---
 
 ## How I work
 
-The reusable parts of the method behind these projects: the ten-step research pass I run before writing a spec, the working rules I give coding agents, the guardrails I apply to any AI feature, and the Claude Code skills I use day to day. [ai-product-workflow](https://github.com/joshflippance/ai-product-workflow)
+The reusable parts of the method behind these projects: the ten step research pass I run before writing a spec, the working rules I give coding agents, the guardrails I apply to any AI feature, and the Claude Code skills I use day to day. [ai-product-workflow](https://github.com/joshflippance/ai-product-workflow)
 
 ---
 
 ## Background
 
-**MealSuite** — Director, Data Integrations (2025–2026). Scaled to 100+ EMR/EHR, ERP, and supply chain integrations. Cut delivery from 65+ business days to under 30.
+**MealSuite**, Director, Data Integrations (2025 to 2026). Scaled to 100+ EMR/EHR, ERP, and supply chain integrations. Cut delivery from 65+ business days to under 30.
 
-**Limelight Platforms** — VP Product (2023–2025). Led the concept-to-launch rebuild serving 100+ brands including Toyota, BMW, and BRP. $2M budget. Event setup from months to days.
+**Limelight Platforms**, VP Product (2023 to 2025). Led the concept to launch rebuild serving 100+ brands including Toyota, BMW, and BRP. $2M budget. Event setup from months to days.
 
-**IMS** — Senior PM (2020–2021). Industry-first connected claims using telematics and crash data. Built and mentored 5 PMs.
+**IMS**, Senior PM (2020 to 2021). Industry first connected claims using telematics and crash data. Built and mentored 5 PMs.
 
-**Prodigy Education** — PM (2019). Content authoring platform behind a 50M+ student user base.
+**Prodigy Education**, PM (2019). Content authoring platform behind a 50M+ student user base.
 
-**Points.com** — Senior PM (2007–2011). 14+ product lines, $5M+ ARR.
+**Points.com**, Senior PM (2007 to 2011). 14+ product lines, $5M+ ARR.
 
 Earlier: Altus Group, BlueSun, Scalar Decisions, ADP Canada, Invatron Systems.
 
@@ -71,9 +74,9 @@ Earlier: Altus Group, BlueSun, Scalar Decisions, ADP Canada, Invatron Systems.
 
 ## Tools
 
-TypeScript, Node, React / React Native, Python, Supabase, Next.js. Claude API and Claude Code, MCP, agent orchestration, structured output, evals, retrieval and grounding, human-in-the-loop design. HL7 / FHIR, REST, SAML / OIDC / SCIM. PostHog, Sentry, Playwright.
+TypeScript, Node, React / React Native, Python, Supabase, Next.js. Claude API and Claude Code, MCP, agent orchestration, structured output, evals, retrieval and grounding, human in the loop design. HL7 / FHIR, REST, SAML / OIDC / SCIM. PostHog, Sentry, Playwright.
 
-AI Product Management certification (Product School) · Certified Agile Product Owner (Scrum Alliance) · Business analysis master's certificate, Schulich School of Business
+Vibe Coding, Claude Code for Product Managers and AI Product Management certifications (Product School) · Certified Agile Product Owner (Scrum Alliance) · Business analysis master's certificate, Schulich School of Business
 
 ---
 
